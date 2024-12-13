@@ -10,18 +10,7 @@ const app = express();
 dotenv.config();
 
 // Middleware
-app.use(cors({
-    origin: ["https://mern-app-frontend-nine.vercel.app"], // Frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // HTTP methods
-    credentials: true // Allow credentials (cookies)
-}));
-
-// Handle preflight requests
-app.options('*', cors({
-    origin: "https://mern-app-frontend-nine.vercel.app",
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -37,6 +26,11 @@ mongoose.connect(URI)
 // Routes
 app.use("/product", productRoute);
 
+app.get('*',(req,res,next)=>{
+    res.status(200).json({
+      message:'bad request'
+    })
+  })
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
